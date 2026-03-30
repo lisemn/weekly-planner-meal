@@ -1,0 +1,101 @@
+# =========================
+# Java / Desktop App
+# COMP602 - Offline App
+# =========================
+
+# ----- Compiled class files -----
+*.class
+
+# ----- Logs -----
+*.log
+
+# ----- Temporary files -----
+*.tmp
+*.temp
+*.swp
+*~
+*.bak
+
+# ----- OS generated files -----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Build output folders
+# =========================
+build/
+dist/
+out/
+target/
+bin/
+
+# Java crash logs
+hs_err_pid*
+replay_pid*
+
+# =========================
+# NetBeans
+# Keep shared project files, ignore local/private files
+# =========================
+nbbuild/
+nbdist/
+.nb-gradle/
+nbproject/private/
+
+# =========================
+# IntelliJ IDEA
+# =========================
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# =========================
+# Eclipse
+# =========================
+.project
+.classpath
+.settings/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Maven
+# =========================
+.mvn/wrapper/maven-wrapper.jar
+
+# =========================
+# Gradle
+# =========================
+.gradle/
+
+# =========================
+# Package outputs
+# Ignore generated archives only in build folders
+# =========================
+build/*.jar
+build/*.war
+build/*.ear
+dist/*.jar
+dist/*.war
+dist/*.ear
+target/*.jar
+target/*.war
+target/*.ear
+
+# =========================
+# Test / coverage output
+# =========================
+coverage/
+reports/
+test-output/
+
+# =========================
+# Local environment files
+# =========================
+.env
+.env.*
