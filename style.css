@@ -1,0 +1,351 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #4f8a5b;
+  --primary-hover: #3d7048;
+  --primary-light: #e8f5e9;
+  --bg: #f5f7f5;
+  --card-bg: #ffffff;
+  --text: #2c3e2c;
+  --text-light: #6b7e6b;
+  --border: #dce5dc;
+  --error: #d32f2f;
+  --error-bg: #fdecea;
+  --success: #2e7d32;
+  --success-bg: #e8f5e9;
+  --radius: 12px;
+  --shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app-container {
+  min-height: 100vh;
+}
+
+/* ---------- Views ---------- */
+.view {
+  display: none;
+}
+
+.view.active {
+  display: flex;
+}
+
+/* ---------- Auth Cards (Login / Register) ---------- */
+#login-view,
+#register-view {
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fff8e1 100%);
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  margin: 20px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 24px;
+  color: var(--primary);
+}
+
+.card h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-bottom: 28px;
+}
+
+/* ---------- Form ---------- */
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.input-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 138, 91, 0.12);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+
+.btn-outline:hover {
+  background: var(--bg);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+/* ---------- Messages ---------- */
+.error-msg,
+.success-msg {
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.error-msg {
+  background: var(--error-bg);
+  color: var(--error);
+}
+
+.success-msg {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.error-msg.show,
+.success-msg.show {
+  display: block;
+}
+
+.switch-text {
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 24px;
+  color: var(--text-light);
+}
+
+.switch-text a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.switch-text a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Dashboard ---------- */
+#dashboard-view {
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.logo-small {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.welcome-user {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.dashboard-main {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.plan-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.plan-controls h1 {
+  font-size: 1.5rem;
+}
+
+.plan-controls .btn-primary {
+  width: auto;
+}
+
+/* ---------- Meal Grid ---------- */
+.meal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-light);
+  font-size: 1rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 2px dashed var(--border);
+}
+
+.day-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.day-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.day-card-header {
+  background: var(--primary);
+  color: #fff;
+  padding: 14px 20px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.day-card-body {
+  padding: 16px 20px;
+}
+
+.meal-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.meal-row:last-child {
+  border-bottom: none;
+}
+
+.meal-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--primary);
+  min-width: 70px;
+  padding-top: 2px;
+}
+
+.meal-name {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .card {
+    padding: 32px 24px;
+  }
+
+  .dashboard-header {
+    padding: 12px 16px;
+  }
+
+  .dashboard-main {
+    padding: 20px 12px;
+  }
+
+  .plan-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .plan-controls h1 {
+    font-size: 1.25rem;
+  }
+
+  .meal-grid {
+    grid-template-columns: 1fr;
+  }
+}

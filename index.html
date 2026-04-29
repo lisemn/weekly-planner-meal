@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Meal Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Login View -->
+    <div id="login-view" class="view active">
+      <div class="card">
+        <div class="logo">&#127869; Meal Planner</div>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Log in to access your saved meal plans</p>
+        <div id="login-error" class="error-msg"></div>
+        <form id="login-form" onsubmit="return false;">
+          <div class="input-group">
+            <label for="login-user">Username</label>
+            <input type="text" id="login-user" placeholder="Enter your username" required>
+          </div>
+          <div class="input-group">
+            <label for="login-pass">Password</label>
+            <input type="password" id="login-pass" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary" onclick="handleLogin()">Log In</button>
+        </form>
+        <p class="switch-text">Don't have an account? <a href="#" onclick="showView('register'); return false;">Create one</a></p>
+      </div>
+    </div>
+
+    <!-- Register View -->
+    <div id="register-view" class="view">
+      <div class="card">
+        <div class="logo">&#127869; Meal Planner</div>
+        <h2>Create Account</h2>
+        <p class="subtitle">Sign up to start planning your meals</p>
+        <div id="register-error" class="error-msg"></div>
+        <div id="register-success" class="success-msg"></div>
+        <form id="register-form" onsubmit="return false;">
+          <div class="input-group">
+            <label for="reg-user">Username</label>
+            <input type="text" id="reg-user" placeholder="Choose a username" required>
+          </div>
+          <div class="input-group">
+            <label for="reg-pass">Password</label>
+            <input type="password" id="reg-pass" placeholder="Choose a password" required>
+          </div>
+          <div class="input-group">
+            <label for="reg-confirm">Confirm Password</label>
+            <input type="password" id="reg-confirm" placeholder="Re-enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary" onclick="handleRegister()">Create Account</button>
+        </form>
+        <p class="switch-text">Already have an account? <a href="#" onclick="showView('login'); return false;">Log in</a></p>
+      </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="view">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <span class="logo-small">&#127869; Meal Planner</span>
+        </div>
+        <div class="header-right">
+          <span class="welcome-user">Hi, <strong id="dash-user"></strong></span>
+          <button class="btn btn-outline btn-sm" onclick="handleLogout()">Log Out</button>
+        </div>
+      </header>
+
+      <main class="dashboard-main">
+        <div class="plan-controls">
+          <h1>Your Weekly Meal Plan</h1>
+          <button class="btn btn-primary" onclick="generateMealPlan()">Generate New Plan</button>
+        </div>
+
+        <div id="meal-plan-grid" class="meal-grid">
+          <p class="empty-state">Click "Generate New Plan" to create your weekly meal plan.</p>
+        </div>
+      </main>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
