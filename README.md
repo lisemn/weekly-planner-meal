@@ -2,11 +2,13 @@
 
 ## Project Description
 
-Weekly Meal Planner is a web-based meal planning application developed for COMP602 Software Development Practice. The application helps users plan weekly meals, manage recipes, set dietary preferences, track allergies, control food budget, and generate useful meal planning information.
+Weekly Meal Planner is a web-based meal planning application developed for COMP602 Software Development Practice. The application helps users plan weekly meals, manage recipes, set dietary preferences, record allergies, control food budget, and generate useful meal planning information.
 
 This project was developed using Scrum practices, including product backlog management, sprint planning, sprint backlog tracking, daily stand-ups, sprint burndown charts, testing, code review, and final release preparation.
 
-## Main Features
+## Project Scope
+
+The project includes or plans to include the following features:
 
 - User registration and login
 - Allergy management
@@ -27,6 +29,7 @@ This project was developed using Scrum practices, including product backlog mana
 - HTML
 - CSS
 - JavaScript
+- Browser localStorage for prototype data storage
 - GitHub for version control
 - Trello for Scrum task management
 
@@ -48,3 +51,43 @@ WeeklyMealPlanner/
 ├── app.js
 ├── README.md
 └── .gitignore
+
+Authors
+
+This project was developed by the COMP602 Weekly Meal Planner team.
+
+Team members:
+
+Zhu
+Ricky
+Lisen
+Abdullah
+Jaydityasinh
+Version Control
+
+The project uses GitHub for version control.
+
+Development work should be completed in feature branches and merged into main through pull requests. The final complete source code will be placed in a branch named Release for marking.
+
+Example feature branches:
+
+feature/meal-completion
+feature/unit-switching
+feature/custom-recipes
+feature/nutrition-info
+feature/shopping-list
+feature/leftover-suggestions
+Final Release
+
+The final release version of the project should be available in the Release branch.
+
+The Release branch should contain the complete final source code, including:
+
+index.html
+style.css
+app.js
+README.md
+.gitignore
+Notes
+
+This project is an academic project for COMP602. The application is designed as a web-based prototype and runs locally in a browser.
