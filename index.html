@@ -582,29 +582,31 @@
       </div>
     </div>
 
-    <!-- Share Plan Panel -->
-    <div id="share-modal" class="modal-overlay" aria-hidden="true">
-      <div class="modal-card share-modal-card">
-        <div class="modal-header">
-          <div>
-            <h2>Share Plan Panel</h2>
-            <p class="page-note">Preview the current weekly meal plan and share it in simple Sprint 1 friendly ways.</p>
-          </div>
-          <button class="icon-button" onclick="closeSharePanel()" aria-label="Close">&times;</button>
-        </div>
-        <div id="share-preview" class="share-preview">
-          <p class="empty-state small-empty">Generate a weekly meal plan before sharing.</p>
-        </div>
-        <div class="share-actions">
-          <button class="btn btn-primary" onclick="copyPlanSummary()">Copy Plan Summary</button>
-          <button class="btn btn-outline" onclick="copyDiscordMessage()">Copy Discord Message</button>
-          <button class="btn btn-outline" onclick="sharePlanByEmail()">Share via Email</button>
-          <button class="btn btn-outline" onclick="copyShareLink()">Copy Read-only Link</button>
-        </div>
-        <div id="share-panel-alert" class="success-msg"></div>
-        <p class="share-note">Sprint 2 path: real short links, selected-user sharing, Discord integration, PDF export, and admin sharing controls.</p>
+<!-- Share Plan Panel -->
+<div id="share-modal" class="modal-overlay" aria-hidden="true">
+  <div class="modal-card share-modal-card">
+    <div class="modal-header">
+      <div>
+        <h2>Share Meal Plan</h2>
+        <p class="page-note">Preview the current weekly meal plan and share it with family members or housemates.</p>
       </div>
+      <button class="icon-button" onclick="closeSharePanel()" aria-label="Close">&times;</button>
     </div>
+    <div id="share-preview" class="share-preview">
+      <p class="empty-state small-empty">Generate a weekly meal plan before sharing.</p>
+    </div>
+    <div class="share-actions">
+      <button class="btn btn-primary" onclick="copyPlanSummary()">Copy Plan Summary</button>
+      <button class="btn btn-outline" onclick="copyDiscordMessage()">Copy Discord Message</button>
+      <button class="btn btn-outline" onclick="sharePlanByEmail()">Share via Email</button>
+      <button class="btn btn-outline" onclick="copyShareLink()">Copy Read-only Link</button>
+    </div>
+
+    <div id="share-panel-alert" class="success-msg"></div>
+
+    <p class="share-note">Sharing options include a plan summary, Discord-style message, email, and read-only link.</p>
+  </div>
+</div>
 
     <!-- Customisation Modal -->
     <div id="customize-modal" class="modal-overlay" aria-hidden="true">
