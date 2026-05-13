@@ -1,101 +1,88 @@
 # =========================
-# Java / Desktop App
-# COMP602 - Offline App
+# Weekly Meal Planner
+# HTML / CSS / JavaScript + Java/NetBeans Support
 # =========================
 
-# ----- Compiled class files -----
-*.class
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# ----- Logs -----
+# Editor folders
+.vscode/
+.idea/
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# ----- Temporary files -----
+# Temporary files
 *.tmp
 *.temp
 *.swp
 *~
 *.bak
 
-# ----- OS generated files -----
-.DS_Store
-Thumbs.db
-desktop.ini
+# Environment files
+.env
+.env.*
+!.env.example
 
-# =========================
+# Node / npm dependencies
+node_modules/
+
 # Build output folders
-# =========================
-build/
 dist/
+build/
 out/
 target/
 bin/
+
+# Test / coverage output
+coverage/
+reports/
+test-output/
+
+# Java compiled files
+*.class
 
 # Java crash logs
 hs_err_pid*
 replay_pid*
 
-# =========================
 # NetBeans
-# Keep shared project files, ignore local/private files
-# =========================
+# Keep shared NetBeans project files, ignore only local/private files
+nbproject/private/
 nbbuild/
 nbdist/
 .nb-gradle/
-nbproject/private/
 
-# =========================
 # IntelliJ IDEA
-# =========================
-.idea/
 *.iml
 *.ipr
 *.iws
 
-# =========================
 # Eclipse
-# =========================
 .project
 .classpath
 .settings/
 
-# =========================
-# VS Code
-# =========================
-.vscode/
-
-# =========================
-# Maven
-# =========================
-.mvn/wrapper/maven-wrapper.jar
-
-# =========================
-# Gradle
-# =========================
+# Maven / Gradle
 .gradle/
 
-# =========================
-# Package outputs
-# Ignore generated archives only in build folders
-# =========================
-build/*.jar
-build/*.war
-build/*.ear
-dist/*.jar
-dist/*.war
-dist/*.ear
-target/*.jar
-target/*.war
-target/*.ear
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
 
-# =========================
-# Test / coverage output
-# =========================
-coverage/
-reports/
-test-output/
-
-# =========================
-# Local environment files
-# =========================
-.env
-.env.*
+# Do not ignore source files:
+# index.html
+# style.css
+# app.js
+# README.md
