@@ -1,0 +1,69 @@
+/* planHistory.css - styles for the Plan History modal added by planHistory.js */
+
+.history-modal-card {
+  max-width: 720px;
+  width: 92%;
+  max-height: 82vh;
+  overflow-y: auto;
+}
+
+.history-toolbar {
+  margin-bottom: 0.75rem;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.history-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.history-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.history-card-top strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.history-card-top .meal-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+}
+
+.history-meal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #475569;
+}
+
+.history-meal-list li {
+  padding: 3px 0;
+  border-bottom: 1px dashed #f1f5f9;
+}
+
+.history-meal-list li:last-child {
+  border-bottom: none;
+}
+
+#plan-history-btn {
+  margin-right: 0.25rem;
+}
