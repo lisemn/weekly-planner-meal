@@ -66,6 +66,7 @@
           <span class="logo-small">&#127869; Meal Planner</span>
         </div>
         <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openFavourites()">⭐ Favourites</button>
           <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
           <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
           <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
@@ -111,6 +112,7 @@
           <span class="logo-small">&#128214; Recipes</span>
         </div>
         <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openFavourites()">⭐ Favourites</button>
           <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
           <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
           <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
@@ -183,6 +185,12 @@
             <label for="recipe-ingredients">Ingredients</label>
             <textarea id="recipe-ingredients" rows="5" placeholder="chicken breast, 150, g, Protein&#10;rice, 1, cup, Grains&#10;broccoli, 1, cup, Vegetables"></textarea>
           </div>
+          <div class="input-group">
+  <label class="checkbox-label">
+    <input type="checkbox" id="recipe-favourite">
+    <span>⭐ Save as Favourite</span>
+  </label>
+</div>
           <div class="button-row">
             <button class="btn btn-primary" onclick="saveCustomRecipe()">Save Recipe</button>
             <button class="btn btn-outline" onclick="resetRecipeForm()">Clear</button>
@@ -201,6 +209,12 @@
             </div>
             <div class="input-group compact-input">
               <label for="recipe-library-type">Meal Type</label>
+              <div class="input-group compact-input">
+  <label class="checkbox-label">
+    <input type="checkbox" id="recipe-library-favs-only" onchange="renderRecipeLibrary()">
+    <span>⭐ Favourites only</span>
+  </label>
+</div>
               <select id="recipe-library-type" onchange="renderRecipeLibrary()">
                 <option value="all">All Types</option>
                 <option value="breakfast">Breakfast</option>
@@ -223,6 +237,7 @@
           <span class="logo-small">&#128722; Shopping List</span>
         </div>
         <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openFavourites()">⭐ Favourites</button>
           <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
           <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
           <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
@@ -289,6 +304,7 @@
           <span class="logo-small">&#128197; Meal Prep Schedule</span>
         </div>
         <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openFavourites()">⭐ Favourites</button>
           <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
           <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
           <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
@@ -413,6 +429,7 @@
           <span class="logo-small">&#9881; My Preferences</span>
         </div>
         <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openFavourites()">⭐ Favourites</button>
           <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
           <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
           <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
@@ -486,6 +503,57 @@
         </main>
       </div>
     </div>
+
+    <!-- Favourites View -->
+<div id="favourites-view" class="view app-view">
+  <header class="dashboard-header">
+    <div class="header-left">
+      <span class="logo-small">⭐ Favourites</span>
+    </div>
+    <div class="header-right top-nav">
+      <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
+      <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
+      <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
+      <button class="btn btn-outline btn-sm" onclick="openPrepSchedule()">Meal Prep</button>
+      <button class="btn btn-outline btn-sm" onclick="openFavourites()">⭐ Favourites</button>
+    </div>
+  </header>
+  <div class="app-shell">
+    <aside class="side-nav">
+      <div class="side-card">
+        <p class="side-label">Account</p>
+        <p class="side-user">Hi, <strong data-current-user></strong></p>
+        <button class="btn btn-outline side-btn" onclick="openProfile()">My Profile</button>
+        <button class="btn btn-outline side-btn" onclick="openPreferences()">My Preferences</button>
+        <button class="btn btn-outline side-btn" onclick="handleLogout()">Log Out / Login</button>
+      </div>
+    </aside>
+    <main class="dashboard-main">
+      <div class="page-heading">
+        <h1>My Favourite Recipes</h1>
+        <p class="page-note">Recipes you've starred appear here for quick access. Click ⭐ on any recipe card to favourite it.</p>
+      </div>
+      <div id="favourites-success" class="success-msg"></div>
+      <div class="filter-bar">
+        <div class="input-group compact-input">
+          <label for="fav-search">Search</label>
+          <input type="text" id="fav-search" placeholder="Search favourites" oninput="renderFavourites()">
+        </div>
+        <div class="input-group compact-input">
+          <label for="fav-type">Meal Type</label>
+          <select id="fav-type" onchange="renderFavourites()">
+            <option value="all">All Types</option>
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="snack">Snack</option>
+          </select>
+        </div>
+      </div>
+      <div id="favourites-grid" class="recipe-grid"></div>
+    </main>
+  </div>
+</div>
 
 
     <!-- Prep Task Modal -->

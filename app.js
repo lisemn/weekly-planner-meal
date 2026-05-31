@@ -1770,6 +1770,7 @@ function saveCustomRecipe() {
   const cost = Number(document.getElementById("recipe-cost").value || 0);
   const calories = Number(document.getElementById("recipe-calories").value || 0);
   const allergens = document.getElementById("recipe-allergens").value
+  const isFav = document.getElementById("recipe-favourite")?.checked || false;
     .split(",")
     .map((item) => item.trim().toLowerCase())
     .filter(Boolean);
@@ -1786,6 +1787,7 @@ function saveCustomRecipe() {
     const recipe = {
       id: editId || `custom-${Date.now()}`,
       isCustom: true,
+      isFavourite: isFav, 
       type,
       name,
       cost,
@@ -1813,6 +1815,16 @@ function saveCustomRecipe() {
   resetRecipeForm();
   renderRecipeLibrary();
 }
+if (isFav) {
+    const favs = getFavourites();
+    const recipeId = editId || `custom-${Date.now() - 1}`; // approximate; renderRecipeLibrary will sync
+    // Favourite is stored by id — re-read from updated data
+    const latest = getCustomMeals().find(m => m.name === name);
+    if (latest && !favs.includes(latest.id)) {
+      favs.push(latest.id);
+      saveFavourites(favs);
+    }
+  }
 
 function resetRecipeForm() {
   const ids = ["recipe-edit-id", "recipe-name", "recipe-cost", "recipe-calories", "recipe-allergens", "recipe-ingredients"];
@@ -1886,11 +1898,12 @@ function renderRecipeLibrary() {
       const reviewButton = getCurrentUser()
         ? `<button class="btn btn-outline btn-xs" onclick="openReviewModalFromEncoded('${encodedMealNameForHandler}')">Review</button>`
         : "";
+      const favBtn = `<button class="btn btn-outline btn-xs ${isFavourite(meal.id) ? 'fav-active-btn' : ''}" onclick="toggleFavourite('${meal.id}')">${isFavourite(meal.id) ? '★ Favourited' : '☆ Favourite'}</button>`;
       return `
         <div class="recipe-card">
           <div class="recipe-card-top">
             <span class="meal-label">${toTitleCase(meal.type)}</span>
-            <div class="button-row compact-actions">${editDeleteActions}${reviewButton}</div>
+            <div class="button-row compact-actions">${favBtn}${editDeleteActions}${reviewButton}</div>
           </div>
           <h3>${safeName}</h3>
           <p class="meal-meta">${formatMoney(meal.cost)} · ${formatCalories(meal.calories)}</p>
@@ -2349,4 +2362,92 @@ function ensureDefaultAccounts() {
   }
   setSharedPlanMode(false);
   showView("login");
+  // ==================== US-2: Favourites ====================
+
+function getFavourites() {
+  const username = getCurrentUser();
+  if (!username) return [];
+  const key = `mealapp_favourites_${username}`;
+  return JSON.parse(localStorage.getItem(key) || "[]");
+}
+
+function saveFavourites(ids) {
+  const username = getCurrentUser();
+  if (!username) return;
+  const key = `mealapp_favourites_${username}`;
+  localStorage.setItem(key, JSON.stringify(ids));
+}
+
+function isFavourite(mealId) {
+  return getFavourites().includes(mealId);
+}
+
+function toggleFavourite(mealId) {
+  const favs = getFavourites();
+  const index = favs.indexOf(mealId);
+  if (index >= 0) {
+    favs.splice(index, 1);
+  } else {
+    favs.push(mealId);
+  }
+  saveFavourites(favs);
+  renderRecipeLibrary();
+  // Re-render favourites view if it's open
+  if (document.getElementById("favourites-view")?.classList.contains("active")) {
+    renderFavourites();
+  }
+}
+
+function renderFavourites() {
+  const container = document.getElementById("favourites-grid");
+  if (!container) return;
+
+  const favIds = getFavourites();
+  const query = document.getElementById("fav-search")?.value.trim().toLowerCase() || "";
+  const type = document.getElementById("fav-type")?.value || "all";
+
+  let meals = getAllMealItems().filter((meal) => favIds.includes(meal.id));
+  if (type !== "all") meals = meals.filter((meal) => meal.type === type);
+  if (query) meals = meals.filter((meal) => mealSearchText(meal).includes(query));
+
+  if (meals.length === 0) {
+    container.innerHTML = '<p class="empty-state small-empty">No favourites found. Star a recipe in the Recipe Library to save it here.</p>';
+    return;
+  }
+
+  container.innerHTML = meals
+    .map((meal) => {
+      const ingredients = (meal.ingredients || []).map((item) => item.name).slice(0, 5).join(", ");
+      const safeName = escapeHTML(meal.name);
+      const encodedMealNameForHandler = encodeRecipeNameForHandler(meal.name);
+      const editDeleteActions = meal.isCustom
+        ? `<button class="btn btn-outline btn-xs" onclick="editCustomRecipe('${meal.id}'); openRecipes();">Edit</button>
+           <button class="btn btn-outline btn-xs danger-btn" onclick="deleteCustomRecipe('${meal.id}')">Delete</button>`
+        : '<span class="tag-pill">Built-in</span>';
+      const reviewButton = getCurrentUser()
+        ? `<button class="btn btn-outline btn-xs" onclick="openReviewModalFromEncoded('${encodedMealNameForHandler}')">Review</button>`
+        : "";
+      return `
+        <div class="recipe-card">
+          <div class="recipe-card-top">
+            <span class="meal-label">${toTitleCase(meal.type)}</span>
+            <div class="button-row compact-actions">
+              <button class="btn btn-outline btn-xs fav-active-btn" onclick="toggleFavourite('${meal.id}')">★ Unfavourite</button>
+              ${editDeleteActions}${reviewButton}
+            </div>
+          </div>
+          <h3>${safeName}</h3>
+          <p class="meal-meta">${formatMoney(meal.cost)} · ${formatCalories(meal.calories)}</p>
+          <p class="meal-meta review-summary">${escapeHTML(getReviewSummary(meal.name))}</p>
+          <p class="meal-meta">Ingredients: ${escapeHTML(ingredients || "Not listed")}</p>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function openFavourites() {
+  showView("favourites");
+  renderFavourites();
+}
 })();
