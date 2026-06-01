@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeeklyMealPlanner</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27/%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Login View -->
+    <div id="login-view" class="view active">
+      <div class="card">
+        <div class="logo">&#127869; Meal Planner</div>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Log in to access your saved meal plans</p>
+        <div id="login-error" class="error-msg"></div>
+        <form id="login-form" onsubmit="return false;">
+          <div class="input-group">
+            <label for="login-user">Username</label>
+            <input type="text" id="login-user" placeholder="Enter your username" required>
+          </div>
+          <div class="input-group">
+            <label for="login-pass">Password</label>
+            <input type="password" id="login-pass" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary" onclick="handleLogin()">Log In</button>
+        </form>
+        <p class="switch-text">Don't have an account? <a href="#" onclick="showView('register'); return false;">Create one</a></p>
+      </div>
+    </div>
+
+    <!-- Register View -->
+    <div id="register-view" class="view">
+      <div class="card">
+        <div class="logo">&#127869; Meal Planner</div>
+        <h2>Create Account</h2>
+        <p class="subtitle">Sign up to start planning your meals</p>
+        <div id="register-error" class="error-msg"></div>
+        <div id="register-success" class="success-msg"></div>
+        <form id="register-form" onsubmit="return false;">
+          <div class="input-group">
+            <label for="reg-user">Username</label>
+            <input type="text" id="reg-user" placeholder="Choose a username" required>
+          </div>
+          <div class="input-group">
+            <label for="reg-pass">Password</label>
+            <input type="password" id="reg-pass" placeholder="Choose a password" required>
+          </div>
+          <div class="input-group">
+            <label for="reg-confirm">Confirm Password</label>
+            <input type="password" id="reg-confirm" placeholder="Re-enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary" onclick="handleRegister()">Create Account</button>
+        </form>
+        <p class="switch-text">Already have an account? <a href="#" onclick="showView('login'); return false;">Log in</a></p>
+      </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="view app-view">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <span class="logo-small">&#127869; Meal Planner</span>
+        </div>
+        <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
+          <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
+          <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
+          <button class="btn btn-outline btn-sm" onclick="openPrepSchedule()">Meal Prep</button>
+        </div>
+      </header>
+      <div class="app-shell">
+        <aside class="side-nav">
+          <div class="side-card">
+            <p class="side-label">Account</p>
+            <p class="side-user">Hi, <strong data-current-user></strong></p>
+            <button class="btn btn-outline side-btn" onclick="openProfile()">My Profile</button>
+            <button class="btn btn-outline side-btn" onclick="openPreferences()">My Preferences</button>
+            <button class="btn btn-outline side-btn" onclick="handleLogout()">Log Out / Login</button>
+          </div>
+        </aside>
+
+        <main class="dashboard-main">
+        <div class="plan-controls">
+          <div>
+            <h1 id="dashboard-title">Your Weekly Meal Plan</h1>
+            <p id="dashboard-note" class="page-note">Plans are generated using allergies, dietary preferences, budget, calories, and recipe data. Use Customise to replace meals.</p>
+          </div>
+          <div class="button-row align-right">
+            <button id="view-shopping-btn" class="btn btn-outline" onclick="openShoppingList()">View Shopping List</button>
+            <button id="share-plan-btn" class="btn btn-outline" onclick="openSharePanel()">Share Plan</button>
+            <button id="generate-plan-btn" class="btn btn-primary" onclick="generateMealPlan()">Generate New Plan</button>
+          </div>
+        </div>
+
+        <section id="zhu-feature-panel" class="sprint-feature-panel" aria-label="Sprint 2 Zhu feature controls">
+          <div class="sprint-feature-card">
+            <div>
+              <h2>Meal Completion</h2>
+              <p id="completion-progress-text" class="feature-note">0/28 meals completed</p>
+            </div>
+            <div class="progress-track"><span id="completion-progress-bar"></span></div>
+            <button id="completion-reset-btn" class="btn btn-outline btn-xs" onclick="resetMealCompletion()">Reset Completion</button>
+          </div>
+
+          <div class="sprint-feature-card">
+            <div>
+              <h2>Measurement Units</h2>
+              <p class="feature-note">Switch ingredient weight display for meals and shopping list.</p>
+            </div>
+            <select id="unit-switch-select" onchange="setMeasurementUnit()">
+              <option value="metric">Grams</option>
+              <option value="ounces">Ounces</option>
+              <option value="pounds">Pounds</option>
+              <option value="cups">Cups</option>
+            </select>
+          </div>
+
+          <div class="sprint-feature-card">
+            <div>
+              <h2>Serving Size</h2>
+              <p class="feature-note">Multiplier for cost, calories, ingredient grams, and portion weight.</p>
+            </div>
+            <div class="serving-control-row">
+              <button class="btn btn-outline btn-xs" onclick="adjustServingSize(-0.5)">-</button>
+              <input type="number" id="serving-size-input" min="0.5" max="6" step="0.5" value="1" onchange="applyServingSize()">
+              <button class="btn btn-outline btn-xs" onclick="adjustServingSize(0.5)">+</button>
+            </div>
+          </div>
+        </section>
+
+        <div id="dashboard-alert" class="success-msg"></div>
+        <div id="meal-plan-grid" class="meal-grid">
+          <p class="empty-state">Click "Generate New Plan" to create your weekly meal plan.</p>
+        </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Recipe Management View -->
+    <div id="recipes-view" class="view app-view">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <span class="logo-small">&#128214; Recipes</span>
+        </div>
+        <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
+          <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
+          <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
+          <button class="btn btn-outline btn-sm" onclick="openPrepSchedule()">Meal Prep</button>
+        </div>
+      </header>
+      <div class="app-shell">
+        <aside class="side-nav">
+          <div class="side-card">
+            <p class="side-label">Account</p>
+            <p class="side-user">Hi, <strong data-current-user></strong></p>
+            <button class="btn btn-outline side-btn" onclick="openProfile()">My Profile</button>
+            <button class="btn btn-outline side-btn" onclick="openPreferences()">My Preferences</button>
+            <button class="btn btn-outline side-btn" onclick="handleLogout()">Log Out / Login</button>
+          </div>
+        </aside>
+
+        <main class="dashboard-main">
+        <div class="page-heading">
+          <h1>Recipe Management</h1>
+          <p class="page-note">Built-in recipes are read-only. You can add, edit, and delete your own custom recipes for the planner.</p>
+        </div>
+
+        <div id="recipe-success" class="success-msg"></div>
+        <div id="recipe-error" class="error-msg"></div>
+
+        <section class="settings-card">
+          <div class="section-title">
+            <h2 id="recipe-form-title">Add Custom Recipe</h2>
+            <p>Ingredients use one line each: <strong>ingredient, quantity, unit, category, grams per unit</strong>. The last value is optional. Example: rice, 1, cup, Grains, 158</p>
+          </div>
+          <input type="hidden" id="recipe-edit-id">
+          <div class="form-grid three-col">
+            <div class="input-group">
+              <label for="recipe-name">Recipe Name</label>
+              <input type="text" id="recipe-name" placeholder="e.g. Chicken Rice Bowl">
+            </div>
+            <div class="input-group">
+              <label for="recipe-type">Meal Type</label>
+              <select id="recipe-type">
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="recipe-cost">Cost ($)</label>
+              <input type="number" id="recipe-cost" min="0" step="0.1" placeholder="5.5">
+            </div>
+            <div class="input-group">
+              <label for="recipe-calories">Calories</label>
+              <input type="number" id="recipe-calories" min="0" step="10" placeholder="550">
+            </div>
+            <div class="input-group">
+              <label for="recipe-portion-grams">Portion Weight (g / serving)</label>
+              <input type="number" id="recipe-portion-grams" min="0" step="1" placeholder="Auto from ingredients">
+            </div>
+            <div class="input-group">
+              <label for="recipe-tags">Diet Tags</label>
+              <select id="recipe-tags" multiple size="4">
+                <option value="vegetarian">Vegetarian</option>
+                <option value="high-protein">High Protein</option>
+                <option value="low-carb">Low Carb</option>
+                <option value="no-spicy">No Spicy</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="recipe-allergens">Allergens</label>
+            <input type="text" id="recipe-allergens" placeholder="e.g. dairy, gluten, egg">
+          </div>
+          <div class="input-group">
+            <label for="recipe-ingredients">Ingredients</label>
+            <textarea id="recipe-ingredients" rows="5" placeholder="chicken breast, 150, g, Protein&#10;rice, 1, cup, Grains&#10;broccoli, 1, cup, Vegetables"></textarea>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-primary" onclick="saveCustomRecipe()">Save Recipe</button>
+            <button class="btn btn-outline" onclick="resetRecipeForm()">Clear</button>
+          </div>
+        </section>
+
+        <section class="settings-card">
+          <div class="section-title">
+            <h2>Recipe Library</h2>
+            <p>Search built-in and custom recipes. Custom recipes can be edited or deleted.</p>
+          </div>
+          <div class="filter-bar">
+            <div class="input-group compact-input">
+              <label for="recipe-library-search">Search</label>
+              <input type="text" id="recipe-library-search" placeholder="Search recipes or ingredients" oninput="renderRecipeLibrary()">
+            </div>
+            <div class="input-group compact-input">
+              <label for="recipe-library-type">Meal Type</label>
+              <select id="recipe-library-type" onchange="renderRecipeLibrary()">
+                <option value="all">All Types</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+              </select>
+            </div>
+          </div>
+          <div id="recipe-library" class="recipe-grid"></div>
+        </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- Shopping List View -->
+    <div id="shopping-view" class="view app-view">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <span class="logo-small">&#128722; Shopping List</span>
+        </div>
+        <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
+          <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
+          <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
+          <button class="btn btn-outline btn-sm" onclick="openPrepSchedule()">Meal Prep</button>
+        </div>
+      </header>
+      <div class="app-shell">
+        <aside class="side-nav">
+          <div class="side-card">
+            <p class="side-label">Account</p>
+            <p class="side-user">Hi, <strong data-current-user></strong></p>
+            <button class="btn btn-outline side-btn" onclick="openProfile()">My Profile</button>
+            <button class="btn btn-outline side-btn" onclick="openPreferences()">My Preferences</button>
+            <button class="btn btn-outline side-btn" onclick="handleLogout()">Log Out / Login</button>
+          </div>
+        </aside>
+
+        <main class="dashboard-main">
+        <div class="page-heading">
+          <h1>Shopping List Generation</h1>
+          <p class="page-note">The list is generated from the current weekly plan and grouped by ingredient category.</p>
+        </div>
+
+        <section class="settings-card">
+          <div class="section-title">
+            <h2>Shopping List Filters</h2>
+            <p>Use the filters to narrow down ingredients by keyword, category, and meal type.</p>
+          </div>
+          <div class="filter-bar">
+            <div class="input-group compact-input">
+              <label for="shopping-search">Search Ingredient</label>
+              <input type="text" id="shopping-search" placeholder="e.g. rice, chicken, vegetable" oninput="renderShoppingList()">
+            </div>
+            <div class="input-group compact-input">
+              <label for="shopping-category">Category</label>
+              <select id="shopping-category" onchange="renderShoppingList()">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+            <div class="input-group compact-input">
+              <label for="shopping-meal-type">Meal Type</label>
+              <select id="shopping-meal-type" onchange="renderShoppingList()">
+                <option value="all">All Meals</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+              </select>
+            </div>
+            <button class="btn btn-primary filter-button" onclick="renderShoppingList()">Refresh List</button>
+          </div>
+        </section>
+
+        <div id="shopping-summary" class="shopping-summary"></div>
+        <div id="shopping-list" class="shopping-list"></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Meal Prep Schedule View -->
+    <div id="prep-view" class="view app-view">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <span class="logo-small">&#128197; Meal Prep Schedule</span>
+        </div>
+        <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
+          <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
+          <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
+          <button class="btn btn-outline btn-sm" onclick="openPrepSchedule()">Meal Prep</button>
+        </div>
+      </header>
+      <div class="app-shell">
+        <aside class="side-nav">
+          <div class="side-card">
+            <p class="side-label">Account</p>
+            <p class="side-user">Hi, <strong data-current-user></strong></p>
+            <button class="btn btn-outline side-btn" onclick="openProfile()">My Profile</button>
+            <button class="btn btn-outline side-btn" onclick="openPreferences()">My Preferences</button>
+            <button class="btn btn-outline side-btn" onclick="handleLogout()">Log Out / Login</button>
+          </div>
+        </aside>
+
+        <main class="dashboard-main">
+        <div class="page-heading">
+          <h1>Meal Prep Schedule</h1>
+          <p class="page-note">This schedule is separate from the shopping list. It organises cooking tasks by day.</p>
+        </div>
+
+        <div id="prep-alert" class="success-msg"></div>
+
+        <section class="settings-card prep-control-card">
+          <div class="section-title">
+            <h2>Weekly Prep Tools</h2>
+            <p>Auto tasks come from the current weekly plan. Editing times here will not change the main meal plan.</p>
+          </div>
+          <div class="filter-bar">
+            <div class="input-group compact-input">
+              <label for="prep-filter">Filter Tasks</label>
+              <select id="prep-filter" onchange="renderPrepSchedule()">
+                <option value="all">All Tasks</option>
+                <option value="not-done">Not Done</option>
+                <option value="done">Completed</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+                <option value="custom">Custom Tasks</option>
+              </select>
+            </div>
+            <button class="btn btn-outline filter-button" onclick="resetPrepTasksFromPlan()">Refresh From Meal Plan</button>
+            <button class="btn btn-primary filter-button" onclick="openPrepTaskModal()">+ Add Prep Task</button>
+          </div>
+        </section>
+
+        <div id="prep-summary" class="shopping-summary"></div>
+        <div id="prep-schedule" class="prep-grid"></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- My Profile View -->
+    <div id="profile-view" class="view app-view">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <span class="logo-small">&#128100; My Profile</span>
+        </div>
+        <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
+          <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
+          <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
+          <button class="btn btn-outline btn-sm" onclick="openPrepSchedule()">Meal Prep</button>
+        </div>
+      </header>
+      <div class="app-shell">
+        <aside class="side-nav">
+          <div class="side-card">
+            <p class="side-label">Account</p>
+            <p class="side-user">Hi, <strong data-current-user></strong></p>
+            <button class="btn btn-outline side-btn" onclick="openProfile()">My Profile</button>
+            <button class="btn btn-outline side-btn" onclick="openPreferences()">My Preferences</button>
+            <button class="btn btn-outline side-btn" onclick="handleLogout()">Log Out / Login</button>
+          </div>
+        </aside>
+
+        <main class="dashboard-main narrow-main">
+        <div class="page-heading">
+          <h1>My Profile</h1>
+          <p class="page-note">Store basic information used by the meal planner.</p>
+        </div>
+
+        <div class="settings-card">
+          <div id="profile-success" class="success-msg"></div>
+          <div id="profile-error" class="error-msg"></div>
+
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="profile-name">Display Name</label>
+              <input type="text" id="profile-name" placeholder="e.g. Jack">
+            </div>
+            <div class="input-group">
+              <label for="profile-age">Age</label>
+              <input type="number" id="profile-age" min="1" max="120" placeholder="e.g. 20">
+            </div>
+            <div class="input-group">
+              <label for="profile-calories">Daily Calorie Target (kcal)</label>
+              <input type="number" id="profile-calories" min="1000" max="6000" placeholder="e.g. 2200">
+            </div>
+            <div class="input-group">
+              <label for="profile-budget">Weekly Food Budget ($)</label>
+              <input type="number" id="profile-budget" min="0" step="1" placeholder="e.g. 100">
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+            <button class="btn btn-outline" onclick="openDashboard()">Back to Meal Plan</button>
+          </div>
+        </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- My Preferences View -->
+    <div id="preferences-view" class="view app-view">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <span class="logo-small">&#9881; My Preferences</span>
+        </div>
+        <div class="header-right top-nav">
+          <button class="btn btn-outline btn-sm" onclick="openDashboard()">Meal Plan</button>
+          <button class="btn btn-outline btn-sm" onclick="openRecipes()">Recipes</button>
+          <button class="btn btn-outline btn-sm" onclick="openShoppingList()">Shopping List</button>
+          <button class="btn btn-outline btn-sm" onclick="openPrepSchedule()">Meal Prep</button>
+        </div>
+      </header>
+      <div class="app-shell">
+        <aside class="side-nav">
+          <div class="side-card">
+            <p class="side-label">Account</p>
+            <p class="side-user">Hi, <strong data-current-user></strong></p>
+            <button class="btn btn-outline side-btn" onclick="openProfile()">My Profile</button>
+            <button class="btn btn-outline side-btn" onclick="openPreferences()">My Preferences</button>
+            <button class="btn btn-outline side-btn" onclick="handleLogout()">Log Out / Login</button>
+          </div>
+        </aside>
+
+        <main class="dashboard-main">
+        <div class="page-heading">
+          <h1>My Preferences</h1>
+          <p class="page-note">Dietary Preferences and Food Allergies are kept together here.</p>
+        </div>
+
+        <div id="preferences-success" class="success-msg"></div>
+        <div id="preferences-error" class="error-msg"></div>
+
+        <div class="preferences-layout">
+          <section class="settings-card">
+            <div class="section-title">
+              <h2>Dietary Preferences</h2>
+              <p>Choose the meal style you want the system to follow.</p>
+            </div>
+
+            <div class="option-grid">
+              <label class="option-card"><input type="checkbox" name="dietary" value="vegetarian"><span>Vegetarian</span></label>
+              <label class="option-card"><input type="checkbox" name="dietary" value="high-protein"><span>High Protein</span></label>
+              <label class="option-card"><input type="checkbox" name="dietary" value="low-carb"><span>Low Carb</span></label>
+              <label class="option-card"><input type="checkbox" name="dietary" value="no-spicy"><span>No Spicy Food</span></label>
+            </div>
+          </section>
+
+          <section class="settings-card">
+            <div class="section-title">
+              <h2>Food Allergies</h2>
+              <p>Meals containing selected allergens will be removed when a new plan is generated.</p>
+            </div>
+
+            <div class="option-grid">
+              <label class="option-card warning-option"><input type="checkbox" name="allergy" value="peanuts"><span>Peanuts</span></label>
+              <label class="option-card warning-option"><input type="checkbox" name="allergy" value="tree-nuts"><span>Tree Nuts</span></label>
+              <label class="option-card warning-option"><input type="checkbox" name="allergy" value="dairy"><span>Dairy</span></label>
+              <label class="option-card warning-option"><input type="checkbox" name="allergy" value="egg"><span>Egg</span></label>
+              <label class="option-card warning-option"><input type="checkbox" name="allergy" value="seafood"><span>Seafood</span></label>
+              <label class="option-card warning-option"><input type="checkbox" name="allergy" value="gluten"><span>Gluten</span></label>
+              <label class="option-card warning-option"><input type="checkbox" name="allergy" value="soy"><span>Soy</span></label>
+            </div>
+          </section>
+        </div>
+
+        <div class="settings-card action-card">
+          <div>
+            <h2>Apply to Meal Plan</h2>
+            <p class="page-note">Save first, then generate a new plan to test your preferences.</p>
+          </div>
+          <div class="button-row align-right">
+            <button class="btn btn-outline" onclick="openDashboard()">Back</button>
+            <button class="btn btn-primary" onclick="savePreferences()">Save Preferences</button>
+            <button class="btn btn-primary secondary-action" onclick="savePreferences(); generateMealPlan(); openDashboard();">Save & Generate Plan</button>
+          </div>
+        </div>
+        </main>
+      </div>
+    </div>
+
+
+    <!-- Prep Task Modal -->
+    <div id="prep-task-modal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-card prep-modal-card">
+        <div class="modal-header">
+          <div>
+            <h2 id="prep-modal-title">Add Prep Task</h2>
+            <p class="page-note">Set the time, day, and note for a preparation task. This is separate from the main weekly meal plan.</p>
+          </div>
+          <button class="icon-button" onclick="closePrepTaskModal()" aria-label="Close">&times;</button>
+        </div>
+        <input type="hidden" id="prep-task-id">
+        <div class="form-grid two-col">
+          <div class="input-group">
+            <label for="prep-task-title">Task Name</label>
+            <input type="text" id="prep-task-title" placeholder="e.g. Prepare Chicken Rice Bowl">
+          </div>
+          <div class="input-group">
+            <label for="prep-task-time">Scheduled Time</label>
+            <input type="time" id="prep-task-time">
+          </div>
+          <div class="input-group">
+            <label for="prep-task-day">Day</label>
+            <select id="prep-task-day">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="prep-task-type">Meal Type</label>
+            <select id="prep-task-type">
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+              <option value="snack">Snack</option>
+              <option value="custom">Custom / General</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="prep-task-note">Note</label>
+          <textarea id="prep-task-note" rows="4" placeholder="e.g. Cut vegetables, defrost chicken, pack lunch box"></textarea>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary" onclick="savePrepTask()">Save Task</button>
+          <button class="btn btn-outline" onclick="closePrepTaskModal()">Cancel</button>
+          <button id="prep-task-delete" class="btn btn-outline danger-btn" onclick="deletePrepTaskFromModal()">Delete</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Rating & Review Modal -->
+    <div id="review-modal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-card review-modal-card">
+        <div class="modal-header">
+          <div>
+            <h2 id="review-modal-title">Rate & Review Recipe</h2>
+            <p id="review-context" class="page-note">Share your cooking experience.</p>
+          </div>
+          <button class="icon-button" onclick="closeReviewModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="form-grid two-col">
+          <div class="input-group">
+            <label for="review-rating">Rating</label>
+            <select id="review-rating">
+              <option value="5">5 - Excellent</option>
+              <option value="4">4 - Good</option>
+              <option value="3">3 - Okay</option>
+              <option value="2">2 - Poor</option>
+              <option value="1">1 - Bad</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="review-comment">Review Comment</label>
+            <input type="text" id="review-comment" placeholder="e.g. Easy to cook and tasted good">
+            <small id="review-comment-note" class="field-note">Comment can be added when creating a review. Edits update rating only.</small>
+          </div>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary" onclick="saveReviewFromModal()">Save Review</button>
+          <button class="btn btn-outline" onclick="closeReviewModal()">Cancel</button>
+        </div>
+        <div class="summary-divider"></div>
+        <h3 class="modal-subtitle">Previous Reviews</h3>
+        <div id="review-list" class="review-list"></div>
+      </div>
+    </div>
+
+    <!-- Share Plan Panel -->
+    <div id="share-modal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-card share-modal-card">
+        <div class="modal-header">
+          <div>
+            <h2>Share Plan Panel</h2>
+            <p class="page-note">Preview the current weekly meal plan and share it in simple Sprint 1 friendly ways.</p>
+          </div>
+          <button class="icon-button" onclick="closeSharePanel()" aria-label="Close">&times;</button>
+        </div>
+        <div id="share-preview" class="share-preview">
+          <p class="empty-state small-empty">Generate a weekly meal plan before sharing.</p>
+        </div>
+        <div class="share-actions">
+          <button class="btn btn-primary" onclick="copyPlanSummary()">Copy Plan Summary</button>
+          <button class="btn btn-outline" onclick="copyDiscordMessage()">Copy Discord Message</button>
+          <button class="btn btn-outline" onclick="sharePlanByEmail()">Share via Email</button>
+          <button class="btn btn-outline" onclick="copyShareLink()">Copy Read-only Link</button>
+        </div>
+        <div id="share-panel-alert" class="success-msg"></div>
+        <p class="share-note">Sprint 2 path: real short links, selected-user sharing, Discord integration, PDF export, and admin sharing controls.</p>
+      </div>
+    </div>
+
+    <!-- Customisation Modal -->
+    <div id="customize-modal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h2>Customise Meal</h2>
+            <p id="customize-context" class="page-note">Replace a planned meal.</p>
+          </div>
+          <button class="icon-button" onclick="closeCustomizeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="filter-bar modal-filter">
+          <div class="input-group compact-input grow-input">
+            <label for="customize-search">Search Recipes</label>
+            <input type="text" id="customize-search" placeholder="Search by recipe, ingredient, or tag" oninput="renderCustomizeOptions()">
+          </div>
+          <label class="option-card compact-check">
+            <input type="checkbox" id="customize-safe-only" checked onchange="renderCustomizeOptions()">
+            <span>Follow my allergies/preferences</span>
+          </label>
+        </div>
+        <div id="customize-options" class="customize-options"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

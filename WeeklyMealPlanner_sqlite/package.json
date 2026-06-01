@@ -1,0 +1,11 @@
+{
+  "name": "weekly-meal-planner-sqlite",
+  "version": "1.0.0",
+  "description": "COMP602 Weekly Meal Planner with Scope A SQLite persistence",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --no-warnings server.js",
+    "init-db": "node --no-warnings server.js --init-db"
+  },
+  "dependencies": {}
+}
