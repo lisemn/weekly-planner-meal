@@ -1,0 +1,108 @@
+Weekly Meal Planner SQLite V1.2 - SQLite Connection Scan
+========================================================
+
+Checked result
+--------------
+V1.2 now includes Favourite Recipes with a standard SQLite table:
+- user_favourite_recipes
+
+The app was checked with:
+- node --check app.js
+- node --check server.js
+- node --check planHistory.js
+- node --check mealLock.js
+- SQLite PRAGMA integrity_check
+- /api/health test
+- /api/state POST and GET test for favouriteRecipeIds
+
+Connected to SQLite database
+----------------------------
+1. User accounts
+   - Table: users
+   - Saves username, password hash, role, and created_at.
+
+2. User profile
+   - Table: user_profiles
+   - Saves display name, age, daily calorie target, and weekly food budget.
+
+3. User settings
+   - Table: user_settings
+   - Saves measurement unit and serving size.
+
+4. Dietary preferences
+   - Table: user_dietary_preferences
+   - Saves selected diet preferences such as vegetarian, high-protein, low-carb, and no-spicy.
+
+5. Food allergies
+   - Table: user_allergies
+   - Saves selected allergies so unsafe meals can be filtered out.
+
+6. Custom recipes
+   - Table: custom_recipes
+   - Saves user-created recipes as JSON data.
+
+7. Current weekly meal plan
+   - Tables: meal_plans and meal_plan_items
+   - Saves the current plan, planned meals, completion state, and serving size for meal items.
+
+8. Rating and review
+   - Table: reviews
+   - Saves recipe rating, review comment, reviewer username, created date, and updated date.
+
+9. Favourite recipes
+   - Table: user_favourite_recipes
+   - Saves user-to-recipe favourite relationships using recipe_id.
+   - This is the new V1.2 database-backed feature.
+
+10. Extra user state
+   - Table: user_extra_state
+   - Saves plan history, locked meal slots, prep tasks, and hidden prep task IDs.
+
+Not directly connected to SQLite, and that is okay
+--------------------------------------------------
+1. Built-in recipe catalogue
+   - Stored in app.js as static recipe data.
+   - It does not need SQLite for this prototype because it is fixed default data.
+
+2. Shopping list output
+   - Generated from the saved weekly meal plan and recipe ingredients.
+   - It does not need its own table unless the app later needs persistent checked/unchecked shopping status.
+
+3. Weekly summary and health suggestions
+   - Calculated from the saved profile and current meal plan.
+   - They do not need separate storage because they can be recalculated anytime.
+
+4. Search filters and page filters
+   - Examples: recipe search box, favourite-only filter, shopping category filter, meal type filters.
+   - These are temporary UI states and do not need database storage.
+
+5. Modal open/closed state
+   - Examples: customisation modal, review modal, share modal, history modal.
+   - This is temporary UI state and should not be saved.
+
+6. Login session
+   - Uses sessionStorage so the browser knows who is currently logged in.
+   - The account itself is stored in SQLite, but the temporary active browser session does not need a database table.
+
+7. Share link payloads
+   - Share links encode a read-only copy of the current plan.
+   - They do not need a database table in this prototype.
+
+8. Ingredient conversion constants
+   - Stored in app.js as static helper data.
+   - They do not need SQLite unless the app later allows users/admins to edit conversion rules.
+
+Possible future database work, not required now
+-----------------------------------------------
+1. Shopping checklist persistence
+   - Only needed if checked shopping items should remain checked after refresh.
+
+2. Built-in recipe admin editing
+   - Only needed if built-in recipes should be editable through the app.
+
+3. Real shared-plan records
+   - Only needed if the app should create short server-side share links instead of encoded read-only links.
+
+4. Separate plan history relational tables
+   - Current V1.2 stores plan history in user_extra_state.
+   - This is acceptable for the prototype, but a larger production version could normalise plan history into relational tables.

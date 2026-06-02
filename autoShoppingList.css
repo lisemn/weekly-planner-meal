@@ -1,0 +1,11 @@
+/* Auto Shopping List — card section (list styles live in style.css) */
+
+.auto-shopping-card {
+  margin-bottom: 18px;
+}
+
+.auto-shopping-card .section-title p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
