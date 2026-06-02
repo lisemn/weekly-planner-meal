@@ -1,4 +1,4 @@
-Weekly Meal Planner SQLite Database V1.2
+Weekly Meal Planner SQLite Database
 =========================================
 
 What's in
